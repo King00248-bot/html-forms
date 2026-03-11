@@ -1,165 +1,390 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Complete Form with CSS, Bootstrap & JavaScript</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Job Application Form</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-    rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"
+  />
 
-    <!-- Custom CSS -->
-    <style>
-        body {
-            background-color: #f2f6ff;
-            font-family: Arial, sans-serif;
-        }
+  <!-- Custom Dark Theme (Inline for single-file simplicity) -->
+  <style>
+    /* ====== Dark Theme Palette ====== */
+    :root{
+      --bg: #0f1115;            /* page background */
+      --surface: #171a21;       /* panels/cards */
+      --surface-2: #1f2430;     /* inputs/hover */
+      --text: #e6e8eb;          /* primary text */
+      --muted: #9aa3af;         /* secondary text */
+      --accent: #0d6efd;        /* primary brand (Bootstrap blue) */
+      --accent-2: #22d3ee;      /* cyan accent */
+      --border: #2b3240;        /* subtle borders */
+      --danger: #e11d48;        /* validation red */
+      --success: #16a34a;       /* success green */
+      --focus-ring: rgba(13,110,253,.35);
+    }
 
-        .form-container {
-            background: white;
-            width: 60%;
-            margin: auto;
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 10px;
-            border: 2px solid #0d6efd;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+    }
 
-        fieldset {
-            border: 2px solid #0d6efd;
-            border-radius: 5px;
-            padding: 20px;
-        }
+    /* Page Wrapper */
+    .page-wrap{
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      padding: 40px 0;
+    }
 
-        legend {
-            color: #0d6efd;
-            font-weight: bold;
-            font-size: 18px;
-        }
-    </style>
+    /* Panel/Card look */
+    .form-shell{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .form-header{
+      background: linear-gradient(90deg, rgba(13,110,253,.1), rgba(34,211,238,.08));
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    .form-header h1{
+      font-size: 1.35rem;
+      margin: 0;
+      color: var(--text);
+    }
+
+    .form-body{
+      padding: 22px;
+    }
+
+    /* Fieldsets */
+    fieldset{
+      border: 1px solid var(--border) !important;
+      border-radius: 10px;
+      padding: 18px 16px;
+      margin-bottom: 20px;
+      background: var(--surface);
+    }
+    legend{
+      float: none;
+      width: auto;
+      padding: 0 10px;
+      font-weight: 600;
+      color: var(--accent-2);
+    }
+
+    /* Labels */
+    .form-label{
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Inputs & Selects (dark) */
+    .form-control, .form-select, textarea{
+      background-color: var(--surface-2) !important;
+      color: var(--text) !important;
+      border: 1px solid var(--border) !important;
+    }
+    .form-control::placeholder, textarea::placeholder{
+      color: var(--muted);
+    }
+    .form-control:focus, .form-select:focus, textarea:focus{
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 .25rem var(--focus-ring) !important;
+    }
+
+    /* Checkboxes & Radios */
+    .form-check-input{
+      background-color: #0c0f14;
+      border: 1px solid var(--border);
+    }
+    .form-check-input:checked{
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+    .form-check-label{
+      color: var(--text);
+    }
+
+    /* Buttons */
+    .btn-primary{
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-primary:hover{
+      filter: brightness(1.05);
+    }
+    .btn-outline-light{
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-outline-light:hover{
+      background: var(--surface-2);
+      border-color: var(--text);
+    }
+
+    /* Helper text */
+    .form-text{
+      color: var(--muted) !important;
+    }
+
+    /* Validation colors integrated with Bootstrap states */
+    .is-invalid{
+      border-color: var(--danger) !important;
+    }
+    .invalid-feedback{
+      color: #ffc9d4; /* softer red for dark bg */
+    }
+
+    /* Small Utilities */
+    .section-hint{
+      color: var(--muted);
+      font-size: .95rem;
+      margin: -6px 0 12px 0;
+    }
+
+    /* Make legends & spacing consistent on small screens */
+    @media (max-width: 575.98px){
+      .form-body{
+        padding: 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="container page-wrap">
+    <div class="col-12 col-lg-10 mx-auto form-shell">
+      <div class="form-header d-flex align-items-center justify-content-between">
+        <h1 class="mb-0">Job Application Form</h1>
+        <span class="text-secondary">Dark • Professional • Responsive</span>
+      </div>
 
-    <div class="container form-container">
-
-        <h2 class="text-center mb-4">Contact & Job Interest Form</h2>
-
+      <div class="form-body">
         <!-- FORM START -->
-        <form onsubmit="return validateForm()">
+        <form id="jobAppForm" action="#" method="post" novalidate onsubmit="return validateForm()">
 
-            <!-- Contact Info -->
-            <fieldset class="mb-4">
-                <legend>Contact Info</legend>
+          <!-- ========== 1) Personal Information ========== -->
+          <fieldset>
+            <legend>Personal Information</legend>
+            <p class="section-hint">Please provide your contact details so we can get in touch.</p>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="e.g., Kingsley Motlogelwa" />
+                <div class="invalid-feedback">Full name is required.</div>
+              </div>
 
-                <label class="form-label">Username:</label>
-                <input type="text" id="username" class="form-control mb-3">
+              <div class="col-12 col-md-6">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" />
+                <div class="invalid-feedback">Email is required (e.g., you@example.com).</div>
+              </div>
 
-                <label class="form-label">Email:</label>
-                <input type="text" id="email" class="form-control mb-3">
+              <div class="col-12 col-md-6">
+                <label for="telephone" class="form-label">Telephone</label>
+                <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="+267 71 234 567" />
+                <div class="invalid-feedback">Telephone is required.</div>
+              </div>
 
-                <label class="form-label">Telephone:</label>
-                <input type="text" id="telephone" class="form-control mb-3">
-            </fieldset>
+              <div class="col-12">
+                <label for="address" class="form-label">Physical Address</label>
+                <textarea class="form-control" id="address" name="address" rows="3" placeholder="Street, City/Town, Region"></textarea>
+              </div>
+            </div>
+          </fieldset>
 
-            <!-- Checkboxes -->
-            <fieldset class="mb-4">
-                <legend>Job Positions (Select all that apply)</legend>
-
-                <div class="form-check">
-                    <input type="checkbox" id="account_exec" class="form-check-input" name="jobs">
-                    <label class="form-check-label" for="account_exec">Account Executive</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="business_dev" class="form-check-input" name="jobs">
-                    <label class="form-check-label" for="business_dev">Business Development</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="inside_sales" class="form-check-input" name="jobs">
-                    <label class="form-check-label" for="inside_sales">Inside Sales</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="sales_manager" class="form-check-input" name="jobs">
-                    <label class="form-check-label" for="sales_manager">Sales Manager</label>
-                </div>
-
-                <div class="form-check">
-                    <input type="checkbox" id="vp_sales" class="form-check-input" name="jobs">
-                    <label class="form-check-label" for="vp_sales">VP Sales</label>
-                </div>
-            </fieldset>
-
-            <!-- Additional Controls -->
-            <fieldset class="mb-4">
-                <legend>Additional Details</legend>
-
-                <label class="form-label">Type of Position:</label>
-                <select id="position_type" class="form-select mb-3">
-                    <option value="">-- Select position type --</option>
-                    <option>Part-time contract</option>
-                    <option>Part-time permanent</option>
-                    <option>Full-time contract</option>
-                    <option>Full-time permanent</option>
+          <!-- ========== 2) Position Information ========== -->
+          <fieldset>
+            <legend>Position Information</legend>
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <label for="job_title" class="form-label">Desired Job Title</label>
+                <select id="job_title" name="job_title" class="form-select">
+                  <option value="">-- Select a job title --</option>
+                  <option>Account Executive</option>
+                  <option>Business Development</option>
+                  <option>Inside Sales</option>
+                  <option>Sales Manager</option>
+                  <option>VP Sales</option>
+                  <option>Customer Success Specialist</option>
+                  <option>Marketing Associate</option>
                 </select>
+              </div>
 
-                <label class="form-label">Willing to relocate?</label><br>
-
-                <div class="form-check">
-                    <input type="radio" id="relocate_yes" name="relocate" class="form-check-input">
-                    <label class="form-check-label" for="relocate_yes">Yes</label>
+              <div class="col-12 col-lg-6">
+                <label class="form-label d-block">Employment Type</label>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="employment_type" id="pt_contract" value="Part-time contract">
+                      <label class="form-check-label" for="pt_contract">Part-time contract</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="employment_type" id="pt_perm" value="Part-time permanent">
+                      <label class="form-check-label" for="pt_perm">Part-time permanent</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="employment_type" id="ft_contract" value="Full-time contract">
+                      <label class="form-check-label" for="ft_contract">Full-time contract</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="employment_type" id="ft_perm" value="Full-time permanent">
+                      <label class="form-check-label" for="ft_perm">Full-time permanent</label>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </fieldset>
 
+          <!-- ========== 3) Areas of Interest (Checkboxes) ========== -->
+          <fieldset>
+            <legend>Area(s) of Interest</legend>
+            <p class="section-hint">Select at least one area that matches your interests or experience.</p>
+            <div class="row g-2">
+              <div class="col-12 col-sm-6 col-md-4">
                 <div class="form-check">
-                    <input type="radio" id="relocate_no" name="relocate" class="form-check-input">
-                    <label class="form-check-label" for="relocate_no">No</label>
+                  <input class="form-check-input" type="checkbox" id="interest_account_exec" name="interests" value="Account Executive">
+                  <label class="form-check-label" for="interest_account_exec">Account Executive</label>
                 </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="interest_business_dev" name="interests" value="Business Development">
+                  <label class="form-check-label" for="interest_business_dev">Business Development</label>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="interest_inside_sales" name="interests" value="Inside Sales">
+                  <label class="form-check-label" for="interest_inside_sales">Inside Sales</label>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="interest_sales_manager" name="interests" value="Sales Manager">
+                  <label class="form-check-label" for="interest_sales_manager">Sales Manager</label>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="interest_vp_sales" name="interests" value="VP Sales">
+                  <label class="form-check-label" for="interest_vp_sales">VP Sales</label>
+                </div>
+              </div>
+            </div>
+            <div id="interestsFeedback" class="invalid-feedback d-block" style="display:none">Please select at least one area of interest.</div>
+          </fieldset>
 
-            </fieldset>
+          <!-- ========== 4) Relocation (Yes/No) ========== -->
+          <fieldset>
+            <legend>Relocation</legend>
+            <div class="d-flex gap-4">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="relocate" id="relocate_yes" value="Yes">
+                <label class="form-check-label" for="relocate_yes">Yes</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="relocate" id="relocate_no" value="No">
+                <label class="form-check-label" for="relocate_no">No</label>
+              </div>
+            </div>
+          </fieldset>
 
-            <!-- Buttons -->
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary ms-2">Reset</button>
+          <!-- ========== 5) Additional Message ========== -->
+          <fieldset>
+            <legend>Additional Message</legend>
+            <label for="message" class="form-label">Why are you suitable for this role?</label>
+            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Briefly describe your motivation, strengths, or relevant experience..."></textarea>
+            <div class="form-text mt-2">Optional — keep it short and focused (2–5 sentences).</div>
+          </fieldset>
 
+          <!-- ========== 6) Form Controls ========== -->
+          <div class="d-flex align-items-center gap-2 pt-2">
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+            <button type="reset" class="btn btn-outline-light">Reset</button>
+          </div>
         </form>
         <!-- FORM END -->
-
+      </div>
     </div>
+  </div>
 
-    <!-- JavaScript Validation -->
-    <script>
-        function validateForm() {
-            let name = document.getElementById("username").value;
-            let email = document.getElementById("email").value;
-            let phone = document.getElementById("telephone").value;
+  <!-- Bootstrap 5 Bundle (JS) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-QG8r5E2lQxYJwS2C2xGq1jQh7GxJc1l3YgsnK9H9lTQbG5e9E3w1m8g6d6V6Y2vN"
+    crossorigin="anonymous">
+  </script>
 
-            // Check if name, email, or telephone are empty
-            if (name === "" || email === "" || phone === "") {
-                alert("Please complete all required fields (Username, Email, Telephone)");
-                return false;
-            }
+  <!-- Simple JavaScript Validation -->
+  <script>
+    function setValidity(element, valid) {
+      if (!element) return;
+      if (valid) {
+        element.classList.remove('is-invalid');
+        element.classList.add('is-valid');
+      } else {
+        element.classList.remove('is-valid');
+        element.classList.add('is-invalid');
+      }
+    }
 
-            // Check at least ONE checkbox is selected
-            let checkboxes = document.getElementsByName("jobs");
-            let checked = false;
+    function validateForm() {
+      // Inputs
+      const fullName = document.getElementById('fullname');
+      const email = document.getElementById('email');
+      const telephone = document.getElementById('telephone');
 
-            for (let i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                    checked = true;
-                    break;
-                }
-            }
+      // Interests (checkboxes)
+      const interests = document.querySelectorAll('input[name="interests"]:checked');
+      const interestsFeedback = document.getElementById('interestsFeedback');
 
-            if (!checked) {
-                alert("Please select at least one job position.");
-                return false;
-            }
+      // Trimmed values
+      const nameVal = (fullName.value || '').trim();
+      const emailVal = (email.value || '').trim();
+      const phoneVal = (telephone.value || '').trim();
 
-            return true; // allow form submission
-        }
-    </script>
+      // Basic checks
+      const nameOk = nameVal.length > 0;
+      const emailOk = emailVal.length > 0; // (You can add a regex check if you want)
+      const phoneOk = phoneVal.length > 0;
 
+      setValidity(fullName, nameOk);
+      setValidity(email, emailOk);
+      setValidity(telephone, phoneOk);
+
+      // Interests check: at least one
+      const interestsOk = interests.length > 0;
+      if (!interestsOk) {
+        interestsFeedback.style.display = 'block';
+      } else {
+        interestsFeedback.style.display = 'none';
+      }
+
+      // Final decision
+      if (!nameOk || !emailOk || !phoneOk || !interestsOk) {
+        alert("Please complete all required fields:\n• Full Name\n• Email\n• Telephone\n• At least one Area of Interest");
+        return false; // block submission
+      }
+
+      // If you don't have a backend, you can show a confirmation and prevent navigation:
+      alert("Thank you! Your application has been submitted.");
+      return false; // prevent actual submit in demo mode; set to `true` if you have a server
+    }
+  </script>
 </body>
 </html>
