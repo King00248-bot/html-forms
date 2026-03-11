@@ -6,14 +6,9 @@
   <title>Job Application Form</title>
 
   <!-- Bootstrap 5 CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-    crossorigin="anonymous"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Custom Dark Theme (Inline for single-file simplicity) -->
+  <!-- Custom Dark Theme (inline for single-file simplicity) -->
   <style>
     /* ====== Dark Theme Palette ====== */
     :root{
@@ -26,7 +21,6 @@
       --accent-2: #22d3ee;      /* cyan accent */
       --border: #2b3240;        /* subtle borders */
       --danger: #e11d48;        /* validation red */
-      --success: #16a34a;       /* success green */
       --focus-ring: rgba(13,110,253,.35);
     }
 
@@ -35,16 +29,19 @@
       color: var(--text);
     }
 
-    /* Page Wrapper */
+    /* Page wrapper fills the screen height */
     .page-wrap{
       min-height: 100vh;
       display: flex;
       align-items: flex-start;
-      padding: 40px 0;
+      padding: 24px 0;
     }
 
-    /* Panel/Card look */
+    /* Fluid, responsive shell that fits the screen nicely */
     .form-shell{
+      width: 100%;
+      max-width: 1200px;               /* expand up to 1200px on large screens */
+      margin: 0 auto;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -55,11 +52,11 @@
     .form-header{
       background: linear-gradient(90deg, rgba(13,110,253,.1), rgba(34,211,238,.08));
       border-bottom: 1px solid var(--border);
-      padding: 24px;
+      padding: 20px;
     }
 
     .form-header h1{
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       margin: 0;
       color: var(--text);
     }
@@ -147,33 +144,28 @@
       color: #ffc9d4; /* softer red for dark bg */
     }
 
-    /* Small Utilities */
     .section-hint{
       color: var(--muted);
       font-size: .95rem;
       margin: -6px 0 12px 0;
     }
 
-    /* Make legends & spacing consistent on small screens */
     @media (max-width: 575.98px){
-      .form-body{
-        padding: 16px;
-      }
+      .form-body{ padding: 16px; }
     }
   </style>
 </head>
 <body>
-  <div class="container page-wrap">
-    <div class="col-12 col-lg-10 mx-auto form-shell">
-      <div class="form-header d-flex align-items-center justify-content-between">
+  <div class="container-fluid page-wrap px-3">
+    <div class="form-shell">
+      <div class="form-header">
+        <!-- Clean title only -->
         <h1 class="mb-0">Job Application Form</h1>
-        <span class="text-secondary">Dark • Professional • Responsive</span>
       </div>
 
       <div class="form-body">
         <!-- FORM START -->
-        <form id="jobAppForm" action="#" method="post" novalidate onsubmit="return validateForm()">
-
+        <form onsubmit="return validateForm()" novalidate>
           <!-- ========== 1) Personal Information ========== -->
           <fieldset>
             <legend>Personal Information</legend>
@@ -324,11 +316,7 @@
   </div>
 
   <!-- Bootstrap 5 Bundle (JS) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-QG8r5E2lQxYJwS2C2xGq1jQh7GxJc1l3YgsnK9H9lTQbG5e9E3w1m8g6d6V6Y2vN"
-    crossorigin="anonymous">
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Simple JavaScript Validation -->
   <script>
@@ -369,11 +357,7 @@
 
       // Interests check: at least one
       const interestsOk = interests.length > 0;
-      if (!interestsOk) {
-        interestsFeedback.style.display = 'block';
-      } else {
-        interestsFeedback.style.display = 'none';
-      }
+      interestsFeedback.style.display = interestsOk ? 'none' : 'block';
 
       // Final decision
       if (!nameOk || !emailOk || !phoneOk || !interestsOk) {
@@ -381,9 +365,9 @@
         return false; // block submission
       }
 
-      // If you don't have a backend, you can show a confirmation and prevent navigation:
+      // Demo mode: show confirmation and stop actual navigation
       alert("Thank you! Your application has been submitted.");
-      return false; // prevent actual submit in demo mode; set to `true` if you have a server
+      return false; // change to true if you have a server endpoint
     }
   </script>
 </body>
